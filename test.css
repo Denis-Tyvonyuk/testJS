@@ -1,0 +1,36 @@
+body {
+  height: 100vh;
+}
+.main {
+  height: 100%;
+  width: 100%;
+  background-color: aqua;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+}
+
+.mainInput {
+  display: flex;
+}
+
+#word {
+  margin: 0;
+  padding: 0;
+}
+
+#rectangle {
+  border: 1px dotted #000;
+  position: absolute;
+}
+
+.letter {
+  cursor: pointer;
+}
+
+.selected {
+  border: 1px solid green;
+  background-color: green;
+}

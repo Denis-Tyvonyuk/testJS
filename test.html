@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The title of the website</title>
+    <link rel="stylesheet" href="./test.css" />
+  </head>
+  <body>
+    <script>
+      // JavaScript code
+      //Show Word
+      function showWord() {
+        let inputElement = document.getElementsByClassName("inpt")[0];
+
+        let word = inputElement.value;
+
+        let letterArray = word.split("");
+
+        let html = letterArray
+          .map(function (w, i) {
+            return (
+              "<div" +
+              " class=letter " +
+              "id='letter-" +
+              i +
+              "' style='position: relative; display: inline-block; margin: 2px;'" +
+              " onclick=''>" +
+              w +
+              "</div>"
+            );
+          })
+          .join("");
+
+        document.getElementById("word").innerHTML = html;
+
+        // moveElement();
+      }
+      //Move one letter
+      function moveElement(id) {
+        // const elementToMove = document.getElementById(id);
+        console.log(id);
+        let isMove = false;
+        let offsetX, offsetY;
+
+        elementToMove.addEventListener("mousedown", (e) => {
+          isMove = true;
+          offsetX = e.clientX - elementToMove.offsetLeft;
+          offsetY = e.clientY - elementToMove.offsetTop;
+
+          e.preventDefault();
+        });
+
+        document.addEventListener("mousemove", (e) => {
+          if (!isMove) return;
+
+          elementToMove.style.position = "absolute";
+          elementToMove.style.left = e.clientX - offsetX + "px";
+          elementToMove.style.top = e.clientY - offsetY + "px";
+        });
+
+        document.addEventListener("mouseup", () => {
+          isMove = false;
+        });
+      }
+      /////move elements
+      /////move elements
+      /////move elements
+      /////move elements
+
+      function moveElements() {
+        const elementsToMove = document.getElementsByClassName("selected");
+
+        // Check if elements exist
+        if (elementsToMove.length === 0) {
+          console.log("No elements with class 'selected' found");
+          return;
+        }
+
+        // Create a wrapper div
+        const wrapper = document.createElement("div");
+        wrapper.className = "selected-wrapper";
+        wrapper.id = "selected-wrapper";
+        wrapper.style.position = "absolute";
+
+        // Get the parent of the first element to insert the wrapper
+        const parent = elementsToMove[0].parentNode;
+
+        // Insert wrapper before the first selected element
+        parent.insertBefore(wrapper, elementsToMove[0]);
+
+        // Move all selected elements into the wrapper
+        const elementsArray = Array.from(elementsToMove);
+        elementsArray.forEach((element) => {
+          wrapper.appendChild(element);
+        });
+
+        // Add drag functionality to the wrapper
+        let isMove = false;
+        let offsetX, offsetY;
+
+        wrapper.addEventListener("mousedown", (e) => {
+          isMove = true;
+          offsetX = e.clientX - wrapper.offsetLeft;
+          offsetY = e.clientY - wrapper.offsetTop;
+          e.preventDefault();
+        });
+
+        document.addEventListener("mousemove", (e) => {
+          if (!isMove) return;
+
+          wrapper.style.left = e.clientX - offsetX + "px";
+          wrapper.style.top = e.clientY - offsetY + "px";
+        });
+
+        document.addEventListener("mouseup", () => {
+          if (!isMove) return;
+          isMove = false;
+
+          // Unwrap elements when mouse is released
+          const wrapperDiv = document.getElementById("selected-wrapper");
+          const allChangedItems = document.getElementsByClassName("selected");
+
+          if (!wrapperDiv) return;
+
+          const parentElement = wrapperDiv.parentNode;
+          if (!parentElement) return;
+
+          // Get wrapper's final position
+          const wrapperRect = wrapperDiv.getBoundingClientRect();
+          const parentRect = parentElement.getBoundingClientRect();
+
+          while (wrapperDiv.firstChild) {
+            const child = wrapperDiv.firstChild;
+
+            // Set child position to maintain its visual location
+            child.style.position = "absolute";
+            child.style.left = wrapperRect.left - parentRect.left + "px";
+            child.style.top = wrapperRect.top - parentRect.top + "px";
+
+            parentElement.insertBefore(child, wrapperDiv);
+          }
+          parentElement.removeChild(wrapperDiv);
+        });
+
+        // const elementsToMove = document.getElementsByClassName("selected");
+
+        // console.log(elementsToMove);
+        // let isMove = false;
+        // let offsetX, offsetY;
+
+        // elementToMove.addEventListener("mousedown", (e) => {
+        //   isMove = true;
+        //   offsetX = e.clientX - elementToMove.offsetLeft;
+        //   offsetY = e.clientY - elementToMove.offsetTop;
+
+        //   e.preventDefault();
+        // });
+
+        // document.addEventListener("mousemove", (e) => {
+        //   if (!isMove) return;
+
+        //   elementToMove.style.position = "absolute";
+        //   elementToMove.style.left = e.clientX - offsetX + "px";
+        //   elementToMove.style.top = e.clientY - offsetY + "px";
+        // });
+
+        // document.addEventListener("mouseup", () => {
+        //   isMove = false;
+        // });
+      }
+      //create rectangle
+      //create rectangle
+      //create rectangle
+      function rectangle() {
+        const div = document.getElementById("rectangle");
+        let x1 = 0,
+          y1 = 0,
+          x2 = 0,
+          y2 = 0;
+        let x3 = 0,
+          x4 = 0,
+          y3 = 0,
+          y4 = 0;
+
+        function reCalc() {
+          x3 = Math.min(x1, x2);
+          x4 = Math.max(x1, x2);
+          y3 = Math.min(y1, y2);
+          y4 = Math.max(y1, y2);
+
+          div.style.left = x3 + "px";
+          div.style.top = y3 + "px";
+          div.style.width = x4 - x3 + "px";
+          div.style.height = y4 - y3 + "px";
+        }
+
+        function onMouseDown(e) {
+          div.style.display = "block";
+          x1 = e.clientX;
+          y1 = e.clientY;
+          x2 = x1;
+          y2 = y1;
+          reCalc();
+        }
+
+        function onMouseMove(e) {
+          if (div.style.display === "none") return;
+          x2 = e.clientX;
+          y2 = e.clientY;
+          reCalc();
+        }
+
+        function onMouseUp() {
+          div.style.display = "none";
+          selectElementsInRectangle(x3, y3, x4 - x3, y4 - y3);
+        }
+
+        document.addEventListener("mousedown", onMouseDown);
+        document.addEventListener("mousemove", onMouseMove);
+        document.addEventListener("mouseup", onMouseUp);
+
+        function selectElementsInRectangle(left, top, width, height) {
+          const selectedElements = [];
+          const rectRight = left + width;
+          const rectBottom = top + height;
+
+          const allItemsToCheck = document.getElementsByClassName("letter");
+
+          Array.from(allItemsToCheck).forEach((element) => {
+            const elementRect = element.getBoundingClientRect();
+
+            if (
+              elementRect.left < rectRight &&
+              elementRect.right > left &&
+              elementRect.top < rectBottom &&
+              elementRect.bottom > top
+            ) {
+              selectedElements.push(element);
+              element.classList.add("selected");
+              element.addEventListener("click", moveElements);
+            } else {
+              element.classList.remove("selected");
+            }
+          });
+
+          document.removeEventListener("mousedown", onMouseDown);
+          document.removeEventListener("mousemove", onMouseMove);
+          document.removeEventListener("mouseup", onMouseUp);
+          div.style.display = "none";
+
+          console.log("Selected:", selectedElements);
+          return selectedElements;
+        }
+      }
+    </script>
+    <div id="rectangle" hidden></div>
+    <div class="main">
+      <button onclick="rectangle()">use reactangle one time</button>
+
+      <div class="mainInput">
+        <input class="inpt" />
+        <button id="qw" onclick="showWord(id)">Show</button>
+      </div>
+      <div class="wordToMove">
+        <div id="word"></div>
+      </div>
+    </div>
+  </body>
+</html>
